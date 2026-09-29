@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ArtistsRouteImport } from './routes/artists'
 import { Route as WorkRouteImport } from './routes/work'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArtistsRoute = ArtistsRouteImport.update({
+  id: '/artists',
+  path: '/artists',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkRoute = WorkRouteImport.update({
@@ -25,27 +31,31 @@ const WorkRoute = WorkRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/artists': typeof ArtistsRoute
   '/work': typeof WorkRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/artists': typeof ArtistsRoute
   '/work': typeof WorkRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/artists': typeof ArtistsRoute
   '/work': typeof WorkRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/work'
+  fullPaths: '/' | '/artists' | '/work'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/work'
-  id: '__root__' | '/' | '/work'
+  to: '/' | '/artists' | '/work'
+  id: '__root__' | '/' | '/artists' | '/work'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArtistsRoute: typeof ArtistsRoute
   WorkRoute: typeof WorkRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/artists': {
+      id: '/artists'
+      path: '/artists'
+      fullPath: '/artists'
+      preLoaderRoute: typeof ArtistsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/work': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArtistsRoute: ArtistsRoute,
   WorkRoute: WorkRoute,
 }
 export const routeTree = rootRouteImport
